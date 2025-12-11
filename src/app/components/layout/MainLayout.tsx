@@ -5,7 +5,7 @@ export const MainLayout = () => {
   return (
     <main className="h-svh flex flex-col">
       <Navbar />
-      <section className="flex-1 overflow-y-auto">
+      <section className="flex-1 overflow-y-auto p-4">
         <Outlet />
       </section>
     </main>
