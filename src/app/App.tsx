@@ -5,7 +5,7 @@ import { RouterProvider } from "./router/router";
 export const App = () => {
   return (
     <QueryProvider>
-      <HeroUIProvider>
+      <HeroUIProvider disableRipple>
         <RouterProvider />
       </HeroUIProvider>
     </QueryProvider>
