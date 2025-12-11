@@ -8,6 +8,7 @@ export const Login = () => {
         label="Correo electrónico"
         labelPlacement="outside"
         placeholder="Ingresa tu correo electrónico"
+        className="text-base"
         name="email"
         type="email"
         isRequired
@@ -16,6 +17,7 @@ export const Login = () => {
         label="Contraseña"
         labelPlacement="outside"
         placeholder="Ingresa tu contraseña"
+        className="text-base"
         name="password"
         type="password"
         isRequired
