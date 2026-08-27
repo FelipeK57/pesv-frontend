@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios"
+import { useAuthStore } from "@/modules/auth/store/auth.store"
 
 const baseURL = import.meta.env.VITE_API_URL
 
@@ -28,7 +29,9 @@ api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem("token")
+      // Token rechazado por el backend: limpiamos también el store para que
+      // ProtectedLayout redirija al login en la siguiente navegación.
+      useAuthStore.getState().logout()
     }
 
     return Promise.reject(error)

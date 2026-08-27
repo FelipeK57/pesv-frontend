@@ -6,9 +6,20 @@ import { type LoginInput, loginSchema } from "../schemas/auth.schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 import { useLogin } from "../hooks/useLogin"
+import { useAuthStore } from "../store/auth.store"
+import { toast } from "@/components/ui/toast"
+import { LoaderCircle } from "lucide-react"
+import { useLocation, useNavigate } from "react-router"
+import { homeRouteForRole } from "../lib/auth.routes"
 
 export function LoginForm() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const setToken = useAuthStore((state) => state.setToken)
   const { mutate, isPending } = useLogin()
+
+  // Ruta que el usuario intentaba abrir antes de ser redirigido al login.
+  const from = (location.state as { from?: string } | null)?.from
 
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -20,13 +31,21 @@ export function LoginForm() {
 
   const onSubmit = (data: LoginInput) => {
     mutate(data, {
-      onSuccess: (token) => {
-        console.log("Token recibido:", token)
-        // Aquí puedes redirigir al usuario a otra página o realizar otras acciones
+      onSuccess: (response) => {
+        setToken(response.token)
+        const role = useAuthStore.getState().user?.role
+
+        navigate(from ?? homeRouteForRole(role), { replace: true })
+        toast.add({
+          type: "success",
+          title: "Inicio de sesión exitoso",
+        })
       },
       onError: (error) => {
-        console.error("Error al iniciar sesión:", error)
-        // Aquí puedes mostrar un mensaje de error al usuario
+        toast.add({
+          type: "error",
+          title: error.message,
+        })
       },
     })
   }
@@ -81,7 +100,11 @@ export function LoginForm() {
         form="form-login"
         disabled={isPending}
       >
-        {isPending ? "..." : "Iniciar sesión"}
+        {isPending ? (
+          <LoaderCircle className="animate-spin" />
+        ) : (
+          "Iniciar sesión"
+        )}
       </Button>
     </form>
   )
