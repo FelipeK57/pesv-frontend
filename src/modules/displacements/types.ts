@@ -1,14 +1,12 @@
-import type { Inspection } from "../inspections/types"
-
 export interface Displacement {
   id: number
   inspectionId: number
-  inspection: Inspection
   origin: string
   destination: string
-  departureTime: Date
-  arrivalTime: Date
-  observations?: string
-  createdAt: Date
-  updatedAt: Date
+  /** `LocalTime` del backend: "HH:mm" o "HH:mm:ss". */
+  departureTime?: string | null
+  arrivalTime?: string | null
+  observations?: string | null
+  createdAt: string
+  updatedAt: string
 }

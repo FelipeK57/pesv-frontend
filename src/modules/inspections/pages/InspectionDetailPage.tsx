@@ -7,6 +7,7 @@ import { LoadingState } from "@/components/ui/spinner"
 import { Field, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 
+import { DisplacementsList } from "@/modules/displacements/components/DisplacementsList"
 import { useVehicles } from "@/modules/vehicles/hooks/useVehicles"
 import type { Vehicle } from "@/modules/vehicles/types"
 
@@ -164,6 +165,8 @@ export function InspectionDetailPage() {
             </Card>
           </>
         )}
+
+        <DisplacementsList inspectionId={inspectionId} />
       </div>
     </main>
   )

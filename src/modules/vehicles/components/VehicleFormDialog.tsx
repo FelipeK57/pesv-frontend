@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react"
+import { useState, type ReactElement } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
@@ -62,7 +62,8 @@ function toFormValues(vehicle?: Vehicle): VehicleInput {
 interface VehicleFormDialogProps {
   /** Si se recibe un vehículo el diálogo funciona en modo edición. */
   vehicle?: Vehicle
-  trigger: ReactNode
+  /** Debe ser un único elemento: `DialogTrigger` lo clona vía `render`. */
+  trigger: ReactElement
 }
 
 export function VehicleFormDialog({
@@ -103,7 +104,7 @@ export function VehicleFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger>{trigger}</DialogTrigger>
+      <DialogTrigger render={trigger} />
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>
