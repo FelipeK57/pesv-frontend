@@ -1,13 +1,9 @@
-import { Link, useNavigate, useParams } from "react-router"
-import {
-  ArrowLeftIcon,
-  CheckIcon,
-  CircleAlertIcon,
-  LoaderCircleIcon,
-} from "lucide-react"
+import { Link, useParams } from "react-router"
+import { ArrowLeftIcon, CircleAlertIcon, CircleCheckIcon } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { LoadingState } from "@/components/ui/spinner"
 import { Field, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 
@@ -23,10 +19,10 @@ import {
   itemObservation,
 } from "../lib/inspection-format"
 import { TRANSPORT_TYPE_LABELS } from "../lib/transport-options"
+import { Card, CardContent } from "@/components/ui/card"
 
 export function InspectionDetailPage() {
   const { id } = useParams()
-  const navigate = useNavigate()
   const inspectionId = Number(id)
   const isValidId = Number.isInteger(inspectionId) && inspectionId > 0
 
@@ -48,13 +44,7 @@ export function InspectionDetailPage() {
   if (isLoading) {
     return (
       <StateShell>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <LoaderCircleIcon
-            className="size-4 animate-spin"
-            aria-hidden="true"
-          />
-          Cargando la inspección...
-        </div>
+        <LoadingState label="Cargando la inspección..." />
       </StateShell>
     )
   }
@@ -89,19 +79,9 @@ export function InspectionDetailPage() {
   const hasChecklist = items.length > 0
 
   return (
-    <main className="mx-auto w-full max-w-2xl px-4 py-6">
+    <main className="mx-auto w-full max-w-2xl px-4">
       <div className="flex flex-col gap-6">
         <header className="flex flex-col gap-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="Volver al listado"
-            className="-ml-2 self-start"
-            onClick={() => navigate("/employees/inspections")}
-          >
-            <ArrowLeftIcon />
-          </Button>
-
           <div>
             <h1 className="text-2xl font-semibold">
               {hasChecklist
@@ -143,36 +123,45 @@ export function InspectionDetailPage() {
                 placeholder="—"
               />
             </Field>
+            <Card className="rounded-lg">
+              <CardContent>
+                {items.map((item) => (
+                  <div
+                    key={item.id}
+                    className="border-b py-3 first:pt-0 last:border-0 last:pb-0"
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <span className="text-sm font-medium">
+                        {item.itemName}
+                      </span>
+                      {item.status === "PASS" ? (
+                        <span className="flex shrink-0 items-center gap-1.5 text-sm font-medium text-primary">
+                          <CircleCheckIcon
+                            className="size-4"
+                            aria-hidden="true"
+                          />
+                          Cumple
+                        </span>
+                      ) : (
+                        <span className="flex shrink-0 items-center gap-1.5 text-sm font-medium text-destructive">
+                          <CircleAlertIcon
+                            className="size-4"
+                            aria-hidden="true"
+                          />
+                          No cumple
+                        </span>
+                      )}
+                    </div>
 
-            <ul className="flex flex-col gap-3">
-              {items.map((item) => (
-                <li key={item.id} className="rounded-xl border p-4">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <span className="text-sm font-medium">{item.itemName}</span>
-                    {item.status === "PASS" ? (
-                      <span className="flex shrink-0 items-center gap-1.5 text-sm font-medium text-primary">
-                        <CheckIcon className="size-4" aria-hidden="true" />
-                        Cumple
-                      </span>
-                    ) : (
-                      <span className="flex shrink-0 items-center gap-1.5 text-sm font-medium text-destructive">
-                        <CircleAlertIcon
-                          className="size-4"
-                          aria-hidden="true"
-                        />
-                        No cumple
-                      </span>
+                    {item.status === "FAIL" && (
+                      <p className="mt-2 text-sm text-muted-foreground">
+                        {itemObservation(item)}
+                      </p>
                     )}
                   </div>
-
-                  {item.status === "FAIL" && (
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      {itemObservation(item)}
-                    </p>
-                  )}
-                </li>
-              ))}
-            </ul>
+                ))}
+              </CardContent>
+            </Card>
           </>
         )}
       </div>

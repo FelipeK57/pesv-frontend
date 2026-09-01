@@ -1,6 +1,7 @@
-import { InfoIcon, LoaderCircleIcon } from "lucide-react"
+import { InfoIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 
 import type { TransportOption } from "../lib/transport-options"
 import { StepHeader } from "./StepHeader"
@@ -57,8 +58,7 @@ export function NoVehicleStep({
       >
         {isSaving ? (
           <>
-            <LoaderCircleIcon className="animate-spin" /> Guardando
-            inspección...
+            <Spinner /> Guardando inspección...
           </>
         ) : (
           "Guardar inspección"

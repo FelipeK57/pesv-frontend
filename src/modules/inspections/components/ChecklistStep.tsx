@@ -1,7 +1,8 @@
-import { AlertTriangleIcon, LoaderCircleIcon } from "lucide-react"
+import { AlertTriangleIcon } from "lucide-react"
 import { Controller, useWatch, type UseFormReturn } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 import { Field, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -89,7 +90,7 @@ export function ChecklistStep({
               control={form.control}
               render={({ field, fieldState }) => (
                 <div className="flex flex-col gap-3">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
                     <span className="text-sm font-medium">{item.itemName}</span>
                     <div
                       role="radiogroup"
@@ -180,8 +181,7 @@ export function ChecklistStep({
       >
         {isSaving ? (
           <>
-            <LoaderCircleIcon className="animate-spin" /> Guardando
-            inspección...
+            <Spinner /> Guardando inspección...
           </>
         ) : (
           "Guardar inspección"

@@ -1,9 +1,9 @@
 import { useState, type ReactNode } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { LoaderCircle } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 import {
   Dialog,
   DialogClose,
@@ -257,7 +257,7 @@ export function VehicleFormDialog({
           </DialogClose>
           <Button type="submit" form="form-vehicle" disabled={isPending}>
             {isPending ? (
-              <LoaderCircle className="animate-spin" />
+              <Spinner />
             ) : isEdit ? (
               "Guardar cambios"
             ) : (

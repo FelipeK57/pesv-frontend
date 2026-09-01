@@ -38,16 +38,7 @@ function useColumns(
     () => [
       {
         id: "date",
-        header: ({ column }) => (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="-ml-2"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Fecha
-          </Button>
-        ),
+        header: "Fecha",
         accessorFn: (row) => inspectionDateKey(row.inspectionDate),
       },
       {

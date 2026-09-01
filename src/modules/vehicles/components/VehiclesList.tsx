@@ -1,7 +1,8 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { useVehicles } from "../hooks/useVehicles"
-import { Car, LoaderCircle, Motorbike, Pencil, Trash } from "lucide-react"
+import { Car, Motorbike, Pencil, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { LoadingState } from "@/components/ui/spinner"
 import type { Vehicle } from "../types"
 import { VehicleFormDialog } from "./VehicleFormDialog"
 import { DeleteVehicleDialog } from "./DeleteVehicleDialog"
@@ -10,11 +11,7 @@ export function VehiclesList() {
   const { data: vehicles, isLoading } = useVehicles()
 
   if (isLoading) {
-    return (
-      <div className="mt-6 flex flex-col items-center justify-center text-muted-foreground">
-        <LoaderCircle className="animate-spin" />
-      </div>
-    )
+    return <LoadingState label="Cargando tus vehículos..." />
   }
 
   return (

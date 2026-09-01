@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 
 import { Field, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
@@ -8,7 +9,6 @@ import { Controller, useForm } from "react-hook-form"
 import { useLogin } from "../hooks/useLogin"
 import { useAuthStore } from "../store/auth.store"
 import { toast } from "@/components/ui/toast"
-import { LoaderCircle } from "lucide-react"
 import { useLocation, useNavigate } from "react-router"
 import { homeRouteForRole } from "../lib/auth.routes"
 
@@ -100,11 +100,7 @@ export function LoginForm() {
         form="form-login"
         disabled={isPending}
       >
-        {isPending ? (
-          <LoaderCircle className="animate-spin" />
-        ) : (
-          "Iniciar sesión"
-        )}
+        {isPending ? <Spinner /> : "Iniciar sesión"}
       </Button>
     </form>
   )

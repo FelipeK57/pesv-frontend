@@ -1,7 +1,7 @@
 import { useState, type ReactElement } from "react"
-import { LoaderCircle } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 import {
   Dialog,
   DialogClose,
@@ -58,11 +58,7 @@ export function DeleteVehicleDialog({
             Cancelar
           </DialogClose>
           <Button variant="destructive" onClick={onDelete} disabled={isPending}>
-            {isPending ? (
-              <LoaderCircle className="animate-spin" />
-            ) : (
-              "Eliminar"
-            )}
+            {isPending ? <Spinner /> : "Eliminar"}
           </Button>
         </DialogFooter>
       </DialogContent>

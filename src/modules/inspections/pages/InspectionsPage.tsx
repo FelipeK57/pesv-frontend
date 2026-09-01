@@ -1,7 +1,8 @@
 import { Link } from "react-router"
-import { LoaderCircleIcon, PlusIcon } from "lucide-react"
+import { PlusIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { LoadingState } from "@/components/ui/spinner"
 
 import { InspectionsTable } from "../components/InspectionsTable"
 import { useInspections } from "../hooks/useInspections"
@@ -26,13 +27,7 @@ export function InspectionsPage() {
 
       <div className="mt-6">
         {isLoading ? (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <LoaderCircleIcon
-              className="size-4 animate-spin"
-              aria-hidden="true"
-            />
-            Cargando tus inspecciones...
-          </div>
+          <LoadingState label="Cargando tus inspecciones..." />
         ) : isError ? (
           <div className="flex flex-col items-start gap-3 rounded-xl border border-destructive/40 bg-destructive/5 p-4">
             <p className="text-sm">No fue posible cargar la información.</p>
