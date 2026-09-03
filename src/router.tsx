@@ -9,6 +9,7 @@ import { VehiclesPage } from "./modules/vehicles/pages/VehiclesPage"
 import { NewInspectionPage } from "./modules/inspections/pages/NewInspectionPage"
 import { InspectionsPage } from "./modules/inspections/pages/InspectionsPage"
 import { InspectionDetailPage } from "./modules/inspections/pages/InspectionDetailPage"
+import { EmployeeInspectionsPage } from "./modules/home/supervisor/pages/EmployeeInspectionsPage"
 
 export function Router() {
   return (
@@ -39,6 +40,19 @@ export function Router() {
               }
             >
               <Route path="supervisor" element={<SupervisorHomePage />} />
+              <Route
+                path="supervisor/employees/:employeeId/inspections"
+                element={<EmployeeInspectionsPage />}
+              />
+              <Route
+                path="supervisor/employees/:employeeId/inspections/:id"
+                element={
+                  <InspectionDetailPage
+                    readOnly
+                    backLabel="Volver a las inspecciones"
+                  />
+                }
+              />
             </Route>
           </Route>
         </Route>

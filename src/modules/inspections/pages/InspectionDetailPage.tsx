@@ -22,9 +22,22 @@ import {
 import { TRANSPORT_TYPE_LABELS } from "../lib/transport-options"
 import { Card, CardContent } from "@/components/ui/card"
 
-export function InspectionDetailPage() {
-  const { id } = useParams()
+interface InspectionDetailPageProps {
+  /** Vista de solo lectura para supervisores. */
+  readOnly?: boolean
+  backLabel?: string
+}
+
+export function InspectionDetailPage({
+  readOnly = false,
+  backLabel = "Volver al listado",
+}: InspectionDetailPageProps = {}) {
+  const { id, employeeId } = useParams()
   const inspectionId = Number(id)
+  const backTo =
+    readOnly && employeeId
+      ? `/supervisor/employees/${employeeId}/inspections`
+      : "/employees/inspections"
   const isValidId = Number.isInteger(inspectionId) && inspectionId > 0
 
   const { data, isLoading, isError, refetch, isFetching } = useInspection(
@@ -34,7 +47,7 @@ export function InspectionDetailPage() {
 
   if (!isValidId) {
     return (
-      <StateShell>
+      <StateShell backTo={backTo} backLabel={backLabel}>
         <p className="text-sm text-muted-foreground">
           La inspección solicitada no existe.
         </p>
@@ -44,7 +57,7 @@ export function InspectionDetailPage() {
 
   if (isLoading) {
     return (
-      <StateShell>
+      <StateShell backTo={backTo} backLabel={backLabel}>
         <LoadingState label="Cargando la inspección..." />
       </StateShell>
     )
@@ -52,7 +65,7 @@ export function InspectionDetailPage() {
 
   if (isError || !data) {
     return (
-      <StateShell>
+      <StateShell backTo={backTo} backLabel={backLabel}>
         <div className="flex flex-col items-start gap-3 rounded-xl border border-destructive/40 bg-destructive/5 p-4">
           <p className="text-sm">No fue posible cargar la información.</p>
           <Button
@@ -82,6 +95,17 @@ export function InspectionDetailPage() {
   return (
     <main className="mx-auto w-full max-w-2xl px-4">
       <div className="flex flex-col gap-6">
+        {readOnly && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="-ml-2 self-start"
+            nativeButton={false}
+            render={<Link to={backTo} />}
+          >
+            <ArrowLeftIcon /> {backLabel}
+          </Button>
+        )}
         <header className="flex flex-col gap-3">
           <div>
             <h1 className="text-2xl font-semibold">
@@ -166,13 +190,21 @@ export function InspectionDetailPage() {
           </>
         )}
 
-        <DisplacementsList inspectionId={inspectionId} />
+        <DisplacementsList inspectionId={inspectionId} readOnly={readOnly} />
       </div>
     </main>
   )
 }
 
-function StateShell({ children }: { children: React.ReactNode }) {
+function StateShell({
+  children,
+  backTo = "/employees/inspections",
+  backLabel = "Volver al listado",
+}: {
+  children: React.ReactNode
+  backTo?: string
+  backLabel?: string
+}) {
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-col gap-4 px-4 py-6">
       <Button
@@ -180,9 +212,9 @@ function StateShell({ children }: { children: React.ReactNode }) {
         size="sm"
         className="-ml-2 self-start"
         nativeButton={false}
-        render={<Link to="/employees/inspections" />}
+        render={<Link to={backTo} />}
       >
-        <ArrowLeftIcon /> Volver al listado
+        <ArrowLeftIcon /> {backLabel}
       </Button>
       {children}
     </main>

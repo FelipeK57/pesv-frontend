@@ -32,7 +32,8 @@ import { TRANSPORT_TYPE_LABELS } from "../lib/transport-options"
 import type { InspectionDetail } from "../types"
 
 function useColumns(
-  resolveVehicle: (vehicleId: number) => Vehicle | undefined
+  resolveVehicle: (vehicleId: number) => Vehicle | undefined,
+  basePath: string
 ) {
   return useMemo<ColumnDef<InspectionDetail>[]>(
     () => [
@@ -94,7 +95,7 @@ function useColumns(
               variant="outline"
               size="icon-sm"
               nativeButton={false}
-              render={<Link to={`/employees/inspections/${row.original.id}`} />}
+              render={<Link to={`${basePath}/${row.original.id}`} />}
             >
               <EyeIcon />
             </Button>
@@ -102,15 +103,22 @@ function useColumns(
         ),
       },
     ],
-    [resolveVehicle]
+    [resolveVehicle, basePath]
   )
 }
 
 interface InspectionsTableProps {
   inspections: InspectionDetail[]
+  /** Ruta base para el enlace de detalle. Permite reutilizar la tabla en la vista de supervisor. */
+  basePath?: string
+  emptyMessage?: string
 }
 
-export function InspectionsTable({ inspections }: InspectionsTableProps) {
+export function InspectionsTable({
+  inspections,
+  basePath = "/employees/inspections",
+  emptyMessage = "Aún no has registrado inspecciones.",
+}: InspectionsTableProps) {
   // El listado puede traer solo `vehicleId`: resolvemos el nombre con los
   // vehículos del trabajador, que ya están cacheados por react-query.
   const { data: vehicles } = useVehicles()
@@ -124,7 +132,7 @@ export function InspectionsTable({ inspections }: InspectionsTableProps) {
 
   const table = useReactTable({
     data: inspections,
-    columns: useColumns(resolveVehicle),
+    columns: useColumns(resolveVehicle, basePath),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -157,7 +165,7 @@ export function InspectionsTable({ inspections }: InspectionsTableProps) {
                 colSpan={table.getAllColumns().length}
                 className="h-24 text-center text-muted-foreground"
               >
-                Aún no has registrado inspecciones.
+                {emptyMessage}
               </TableCell>
             </TableRow>
           ) : (

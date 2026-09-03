@@ -12,6 +12,14 @@ export type TransportType =
 
 export type ChecklistStatus = "PASS" | "FAIL"
 
+export interface EmployeeInspectionStats {
+  employeeId: number
+  name: string
+  lastName: string
+  inspections: number
+  displacements: number
+}
+
 export interface Inspection {
   id: number
   employeeId: number

@@ -1,7 +1,11 @@
 import { isAxiosError } from "axios"
 
 import api from "@/config/api"
-import type { Inspection, InspectionDetail } from "../types"
+import type {
+  EmployeeInspectionStats,
+  Inspection,
+  InspectionDetail,
+} from "../types"
 import type { InspectionRequest } from "../schemas/inspections.schema"
 
 function handleError(error: unknown, fallback: string): never {
@@ -19,6 +23,15 @@ export class InspectionsService {
       return (response.data ?? []) as InspectionDetail[]
     } catch (error) {
       handleError(error, "Error al cargar las inspecciones")
+    }
+  }
+
+  async getEmployeeStats() {
+    try {
+      const response = await api.get("/inspections/stats/employees")
+      return (response.data ?? []) as EmployeeInspectionStats[]
+    } catch (error) {
+      handleError(error, "Error al cargar las estadísticas de los trabajadores")
     }
   }
 

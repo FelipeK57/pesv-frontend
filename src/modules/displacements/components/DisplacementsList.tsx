@@ -18,9 +18,14 @@ import { DisplacementFormDialog } from "./DisplacementFormDialog"
 
 interface DisplacementsListProps {
   inspectionId: number
+  /** Oculta las acciones de crear/editar/eliminar (vista de supervisor). */
+  readOnly?: boolean
 }
 
-export function DisplacementsList({ inspectionId }: DisplacementsListProps) {
+export function DisplacementsList({
+  inspectionId,
+  readOnly = false,
+}: DisplacementsListProps) {
   const {
     data: displacements,
     isLoading,
@@ -36,14 +41,16 @@ export function DisplacementsList({ inspectionId }: DisplacementsListProps) {
             Recorridos registrados para esta inspección.
           </p>
         </div>
-        <DisplacementFormDialog
-          inspectionId={inspectionId}
-          trigger={
-            <Button size="sm">
-              <PlusIcon /> Agregar desplazamiento
-            </Button>
-          }
-        />
+        {!readOnly && (
+          <DisplacementFormDialog
+            inspectionId={inspectionId}
+            trigger={
+              <Button size="sm">
+                <PlusIcon /> Agregar desplazamiento
+              </Button>
+            }
+          />
+        )}
       </div>
 
       {isLoading ? (
@@ -91,6 +98,7 @@ export function DisplacementsList({ inspectionId }: DisplacementsListProps) {
                   )}
                 </div>
 
+                {!readOnly && (
                 <div className="flex shrink-0 items-center gap-2">
                   <DisplacementFormDialog
                     inspectionId={inspectionId}
@@ -119,6 +127,7 @@ export function DisplacementsList({ inspectionId }: DisplacementsListProps) {
                     }
                   />
                 </div>
+                )}
               </div>
             ))}
           </CardContent>
